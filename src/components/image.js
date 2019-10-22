@@ -5,6 +5,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import "./image.css";
 import * as contentful from 'contentful';
+import {Transition, config, animated} from 'react-spring/renderprops'
 
 
 /*
@@ -49,6 +50,9 @@ import * as contentful from 'contentful';
       mixinSize: 0,
       mixinInterval: 2,
       mixinIntervalCount: 0,
+      id: 0,
+      lastItem: true,
+      toggle: true,
     }
    }
 
@@ -126,6 +130,7 @@ import * as contentful from 'contentful';
   }
 
    loadMedia(contentType, idx) {
+
     this.state.client.getEntries({
       'content_type': contentType,
       'fields.id': idx
@@ -143,12 +148,23 @@ import * as contentful from 'contentful';
               
             )});
           } else {
-            this.setState({currentImgSrc: (
-              <div>
-            
-                <img src={entry.fields.media.fields.file.url} />
-  
+            const {lastItem, toggle} = this.state;
+            const newToggle = !toggle;
+            this.setState({toggle: newToggle, currentImgSrc: (
+              <div key={entry.fields.media.fields.file.url} className={newToggle? "fade-in": "fadeOut"}>
+              <Transition
+              items={lastItem}
+              from={{ opacity: 0 }}
+              enter={{ opacity: 1 }}
+              leave={{ opacity: 0 }}
+              config={config.molasses}
+        >
+            {
+              lastItem => lastItem &&  (props => <div style={props} ><img src={entry.fields.media.fields.file.url} /></div>)
+            }
+        </Transition>
               </div>
+              
   
               
             )});
@@ -169,7 +185,10 @@ import * as contentful from 'contentful';
         showThumbs={false}
         infiniteLoop={true}
       >
-         {this.state.currentImgSrc}
+
+                    {this.state.currentImgSrc}
+
+         
       </Carousel>
       )
   }
