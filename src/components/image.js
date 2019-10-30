@@ -5,30 +5,8 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import "./image.css";
 import * as contentful from 'contentful';
-import {Transition, config, animated} from 'react-spring/renderprops'
-
-
-/*
- * This component is built using `gatsby-image` to automatically serve optimized
- * images with lazy loading and reduced file sizes. The image is loaded using a
- * `useStaticQuery`, which allows us to load the image from directly within this
- * component, rather than having to pass the image data down from pages.
- *
- * For more information, see the docs:
- * - `gatsby-image`: https://gatsby.dev/gatsby-image
- * - `useStaticQuery`: https://www.gatsbyjs.org/docs/use-static-query/
- */
-// const data = useStaticQuery(graphql`
-//     query {
-//       placeholderImage: file(relativePath: { eq: "img_0007.jpg" }) {
-//         childImageSharp {
-//           fluid(maxHeight: 1200, maxWidth: 1800) {
-//             ...GatsbyImageSharpFluid
-//           }
-//         }
-//       }
-//     }
-//   `);
+import {Transition, config, animated} from 'react-spring/renderprops';
+import LazyLoad from 'react-lazyload';
 
 
  class Image extends Component {
@@ -160,7 +138,7 @@ import {Transition, config, animated} from 'react-spring/renderprops'
               config={config.molasses}
         >
             {
-              lastItem => lastItem &&  (props => <div style={props} ><img src={entry.fields.media.fields.file.url} /></div>)
+              lastItem => lastItem &&  (props => <div style={props} ><LazyLoad><img src={entry.fields.media.fields.file.url} /></LazyLoad></div>)
             }
         </Transition>
               </div>
