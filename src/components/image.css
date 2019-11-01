@@ -3,6 +3,9 @@
   to {opacity: 1;}
 }
 
+html {
+  overflow: hidden;
+}
 .image-container {
 
   -webkit-transition: all .3s ease-in-out;
